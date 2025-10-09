@@ -1,0 +1,34 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+      - ./db/my.cnf:/etc/mysql/conf.d/my.cnf #日本語対応
+    restart: always
+    environment:
+      #docker composeコマンドを使う前に、containerディレクトリに.envファイルを作成する。
+      #.envファイルには次を追加→ MYSQL_ROOT_PASSWORD=password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2
+    container_name: phpmyadmin
+    ports: [ "8081:80" ]
+    depends_on: [ "db" ]
+    restart: always
+    environment:
+      MEMORY_LIMIT: 2G
+      UPLOAD_LIMIT: 2G
+
+  apache:
+    build: ./dockerfile-folder/apache
+    container_name: apache_php
+    volumes:
+      - ./htdocs:/var/www/html
+      - ./php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    ports: [ "8080:80" ]
+    depends_on: [ "db" ]
+    restart: always
+    environment:
+      PHP_INI_SCAN_DIR: "/usr/local/etc/php/conf.d"
