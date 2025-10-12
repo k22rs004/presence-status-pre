@@ -1,0 +1,63 @@
+/* 1. ヘッダー上部 (青い部分) のサイズ調整 */
+.header-top {
+    font-size: 1.15rem; 
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+/* 2. メニューバーのリンクの文字色とサイズ調整 */
+
+/* --- 文字色を強制的に真っ白にするための高詳細度セレクタ --- */
+/* Bootstrapの.navbar-dark内の.nav-linkに対して適用 */
+.navbar-dark .navbar-nav .large-nav-link {
+    /* 最も明るい白(#FFFFFF)に強制的に設定 */
+    color: #FFFFFF !important; 
+    
+    /* サイズ調整 (変更なし) */
+    font-size: 1.15rem !important; 
+    padding: 0.7rem 1.2rem !important; 
+    transition: background-color 0.3s;
+    white-space: nowrap;
+}
+
+/* ホバー時の文字色も白を維持 */
+.navbar-dark .navbar-nav .large-nav-link:hover {
+    color: #FFFFFF !important;
+    /* 背景色のみ変化 */
+    background-color: rgba(255, 255, 255, 0.2); 
+}
+
+/* アクティブなリンクの文字色も白を維持 */
+.navbar-dark .navbar-nav .large-nav-link.active {
+    color: #FFFFFF !important;
+}
+
+
+/*ログインページ*/
+/* フォーム自体のスタイル調整 */
+.login-form {
+    /* 幅をページ幅の40%に強制的に設定 */
+    width: 40% !important; 
+    
+    /* フォームが小さくなりすぎないように最小幅を設定できます（任意） */
+    /* min-width: 350px; */ 
+    
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* フォーム内のテキストを左寄せにする */
+.login-form table tr td:first-child {
+    text-align: left;
+    width: 30%; 
+    vertical-align: middle; 
+}
+
+/* フォーム内の入力フィールドの幅 */
+.login-form table tr td:last-child {
+    text-align: left;
+    width: 70%; 
+}
