@@ -5,6 +5,8 @@ services:
     volumes:
       - ./db/mysql:/var/lib/mysql
       - ./db/my.cnf:/etc/mysql/conf.d/my.cnf #日本語対応
+    ports: # ← ここから追加
+      - "3306:3306" # ホストの3306ポートをコンテナの3306ポートにマッピング
     restart: always
     environment:
       #docker composeコマンドを使う前に、containerディレクトリに.envファイルを作成する。

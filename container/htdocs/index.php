@@ -6,11 +6,12 @@ include('src/pg_header.php');
 
 // uroleが存在しているかを確認してから処理
 if (isset($_SESSION['urole']) && $_SESSION['urole'] == 0) {
-    $action = 'usr_home';
+    $action = 'all_home';
 } else if (isset($_SESSION['urole']) && $_SESSION['urole'] == 1) {
-    $action = 'adm_home';
+    $action = 'all_home';
 } else {
     $action = 'sys_login';
+   // $action = 'all_home';
 }
 
 // GETパラメータで指定があれば上書き

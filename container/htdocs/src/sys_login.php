@@ -2,8 +2,8 @@
     <form action="?do=sys_check" method="post" class="form login-form"style="width:50%;">
         <table class="table table-hover" style="width: 100%; text-align: center;">
             <tr>
-                <td>ユーザID：</td>
-                <td><input type="text" name="uid" class="form-control" style="width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box;"></td>
+                <td>学籍番号：</td>
+                <td><input type="text"  name="unumber" class="form-control" style="width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box;"></td>
             </tr>
             <tr>
                 <td>パスワード：</td>
@@ -14,5 +14,8 @@
                 </td>
             </tr>
             </table>
+            <div style="text-align: center; margin-top: 20px;">
+            <button class="btn btn-primary" style="width: 15%">ログイン</button>
+            </div>
     </form>
 </div>
