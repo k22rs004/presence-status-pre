@@ -13,14 +13,14 @@
 <body>
     <header>
         <div class="header-top bg-primary text-white d-flex justify-content-between align-items-center py-2 px-4">
-            <h1 class="h4 mb-0" style="white-space: nowrap; font-size: clamp(16px, 3vw, 32px);">在席状況可視化システム</h1>
+            <h1 class="h4 mb-0" style="white-space: nowrap; font-size: clamp(14px, 3vw, 32px);">在席状況可視化システム</h1>
             <div class="d-flex align-items-center">
                 <?php
                 if (isset($_SESSION['urole'])) {
                     echo '<span class="me-3">' . $_SESSION['student_number'] . '</span>';
                     echo '<span class="me-3">' . $_SESSION['uname'] . '</span>';
                     echo '<span class="me-3">   </span>';
-                    echo '<a href="?do=sys_logout" class="text-white text-decoration-none" style="font-size: clamp(14px, 1vw, 32px);">ログアウト</a>';
+                    echo '<a href="?do=sys_logout" class="text-white text-decoration-none" style="font-size: clamp(12px, 1vw, 32px);">ログアウト</a>';
                 }
                 ?>
             </div>
@@ -42,14 +42,14 @@
                 echo '<li class="nav-item">';
                 if ($action == '') {
                     // リンクなしで名前を表示
-                    echo '<li class="nav-link large-nav-link" style="color: white; font-size: clamp(12px, 1vw, 24px);">' . $label . '</li>';
+                    echo '<li class="nav-link large-nav-link" style="color: white; font-size: clamp(10px, 1vw, 24px);">' . $label . '</li>';
                 } else {
-                    echo '<li><a class="nav-link large-nav-link" style="color: white; font-size: clamp(12px, 1vw, 24px);" href="?do=' . $action . '">' . $label . '</a></li>';
+                    echo '<li><a class="nav-link large-nav-link" style="color: white; font-size: clamp(10px, 1vw, 24px);" href="?do=' . $action . '">' . $label . '</a></li>';
                 }
                 echo '</li>';
             }
 
-            
+
             echo '</ul>';
             echo '</div>';
             echo '</nav>';
