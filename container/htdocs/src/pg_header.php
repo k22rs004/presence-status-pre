@@ -13,7 +13,7 @@
 <body>
     <header>
         <div class="header-top bg-primary text-white d-flex justify-content-between align-items-center py-2 px-4">
-            <h1 class="h4 mb-0" style="white-space: nowrap; font-size: clamp(14px, 3vw, 32px);">在席状況可視化システム</h1>
+            <h1 class="h4 mb-0" style="white-space: nowrap; font-size: clamp(12px, 3vw, 32px);">在席状況可視化システム</h1>
             <div class="d-flex align-items-center">
                 <?php
                 if (isset($_SESSION['urole'])) {
@@ -35,7 +35,7 @@
                 '在席状況' => 'all_home',
                 '在席時間帯' => 'tmp',
                 'スケジュール' => 'tmp',
-                '登録端末' => 'tmp'
+                '端末一覧' => 'all_device-list'
             );
 
             foreach ($menu as $label => $action) {
