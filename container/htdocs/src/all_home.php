@@ -23,10 +23,10 @@ echo "<table class='table table-hover' style='
     margin: 0 auto;
     '>";
 echo "<tr>";
-echo "<td>氏名</td>";
-echo "<td>ID</td>";
-echo "<td>在席状況</td>";
-echo "<td>離席からの経過時間</td>";
+echo "<td style='text-align: center;'>氏名</td>";
+echo "<td style='text-align: center;'>ID</td>";
+echo "<td style='text-align: center;'>在席状況</td>";
+echo "<td style='text-align: center;'>離席からの経過時間</td>";
 echo "</tr>";
 while ($row = $rs->fetch_assoc()) {
     $uid = $row['user_id'];
