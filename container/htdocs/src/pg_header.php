@@ -33,7 +33,7 @@
             echo '<ul class="navbar-nav">';
             $menu = array(
                 '在席状況' => 'all_home',
-                '在席時間帯' => 'tmp',
+                '在席時間帯' => 'all_time_of_attendance',
                 'スケジュール' => 'all_schedule',
                 '予定一覧' => 'all_device-list'
             );

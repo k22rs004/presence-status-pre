@@ -3,7 +3,7 @@
 // データベース接続、変数初期化、フォーム送信処理
 // ----------------------------------------------------------------------
 // ユーザー環境に合わせてファイル名を修正してください。
-include('db_inc.php'); 
+include('db_inc.php');
 
 // 予定IDがGETパラメータで渡されているかチェック
 $schedule_id = $_GET['schedule_id'] ?? 0;
@@ -45,7 +45,7 @@ if ($user_id > 0) {
 
                 // フォームに初期値をセット
                 $schedule_name = $schedule_data['schedule_name'];
-                $schedule_place = $schedule_data['schedule_place'];
+                $schedule_place = $schedule_data['schedule_place'] ?? '';
 
                 // 時刻の分解
                 list($start_h, $start_m) = explode(':', $schedule_data['schedule_start']);
@@ -98,10 +98,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $error_message .= "・SQL準備エラー (DELETE): " . $conn->error . "<br>";
         }
-
     } elseif (isset($_POST['action']) && $_POST['action'] === 'edit') {
         // 編集処理
-        
+
         // 1. POSTデータの取得（更新後の値）
         $schedule_name = trim($_POST['schedule_name'] ?? '');
         $start_h = $_POST['start_h'] ?? '';
@@ -153,13 +152,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 WHERE schedule_id = ? AND user_id = ?";
 
             if ($stmt_update = $conn->prepare($sql_update)) {
-                $stmt_update->bind_param("ssissii", 
-                    $schedule_name, 
-                    $schedule_place, 
-                    $day_bitmap_int, 
-                    $schedule_start, 
-                    $schedule_end, 
-                    $schedule_id, 
+                $stmt_update->bind_param(
+                    "ssissii",
+                    $schedule_name,
+                    $schedule_place,
+                    $day_bitmap_int,
+                    $schedule_start,
+                    $schedule_end,
+                    $schedule_id,
                     $user_id
                 );
 
@@ -215,7 +215,8 @@ if (!$is_authenticated && $schedule_id > 0) {
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.5);
-        display: none; /* 初期は非表示 */
+        display: none;
+        /* 初期は非表示 */
         justify-content: center;
         align-items: center;
         z-index: 1000;
@@ -230,7 +231,7 @@ if (!$is_authenticated && $schedule_id > 0) {
         max-width: 400px;
         width: 90%;
     }
-    
+
     .modal-content h4 {
         margin-top: 0;
         font-size: 1.3rem;
@@ -239,7 +240,8 @@ if (!$is_authenticated && $schedule_id > 0) {
 
     .modal-content p {
         margin-bottom: 20px;
-        color: #dc3545; /* 警告色 */
+        color: #dc3545;
+        /* 警告色 */
         font-weight: bold;
     }
 
@@ -261,7 +263,7 @@ if (!$is_authenticated && $schedule_id > 0) {
 
     <form method="POST" action="?do=all_schedule-edit&schedule_id=<?php echo $schedule_id; ?>&back=<?php echo $back; ?>" id="editForm">
         <input type="hidden" name="action" value="edit">
-        
+
         <div class="row mb-3 align-items-center">
             <div class="col-md-3 text-md-start">
                 <label for="schedule_name" class="col-form-label">
@@ -284,11 +286,11 @@ if (!$is_authenticated && $schedule_id > 0) {
             <div class="col-md-9 d-flex align-items-center">
                 <input type="number" class="form-control" name="start_h" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$start_h)); ?>" min="0" max="23" style="width: 70px;" required>
                 <span class="time-separator">:</span>
-                <input type="number" class="form-control" name="start_m" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$start_m)); ?>" min="0" max="59" step="15" style="width: 70px;" required>
+                <input type="number" class="form-control" name="start_m" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$start_m)); ?>" min="0" max="59" step="1" style="width: 70px;" required>
                 <span class="time-separator">～</span>
                 <input type="number" class="form-control" name="end_h" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$end_h)); ?>" min="0" max="23" style="width: 70px;" required>
                 <span class="time-separator">:</span>
-                <input type="number" class="form-control" name="end_m" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$end_m)); ?>" min="0" max="59" step="15" style="width: 70px;" required>
+                <input type="number" class="form-control" name="end_m" value="<?php echo htmlspecialchars(sprintf('%02d', (int)$end_m)); ?>" min="0" max="59" step="1" style="width: 70px;" required>
             </div>
         </div>
 
@@ -328,9 +330,9 @@ if (!$is_authenticated && $schedule_id > 0) {
             $back_url = ($back == 0) ? "index.php?do=all_在席時間帯？" : "index.php?do=all_schedule";
             ?>
             <a href="<?php echo $back_url; ?>" class="btn btn-secondary btn-custom-height" style="background-color: #6c757d; border-color: #6c757d;">戻る</a>
-            
+
             <button type="button" class="btn btn-danger btn-custom-height" id="deleteButton">削除</button>
-            
+
             <button type="submit" class="btn btn-primary btn-custom-height" style="background-color: #007bff; border-color: #007bff;">編集</button>
         </div>
     </form>
