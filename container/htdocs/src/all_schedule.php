@@ -7,7 +7,7 @@
 // ユーザーIDは外部から渡されるものと仮定
 // NOTE: session_start() がどこかで呼ばれている必要があります。
 
-$user_id = $_SESSION['uid'] ?? 0;
+$user_id = $_GET['uid'] ?? $_SESSION['uid'];
 // NOTE: 以下のファイル名と変数は、元のコードに基づいていますが、
 // 実際の動作には db_inc.php が正しく読み込まれる必要があります。
 include("db_inc.php");
@@ -399,6 +399,33 @@ $day_column_width_percent = 100 / $day_count;
         }
         ?>
     </div>
+    <?php
+    echo '<form method="get" class="form login-form" style="display: flex; align-items: center; margin-bottom: 10px;">';
+    echo '<input type="hidden" name="do" value="all_schedule" />';
+    echo '<select class="form-select" style="width:25%; font-weight:bold;" name="uid">';
+
+    $sql_user = "SELECT * FROM tb_user";
+    $rs_user = $conn->query($sql_user);
+    $errorMessage = "";
+
+    if (!$rs_user) die('エラー: ' . $conn->error);
+    while ($row = $rs_user->fetch_assoc()) {
+        $choice_uid = $row['user_id'];
+        $choice_name = $row['name'];
+        $choice_student_number = $row['student_number'];
+        if (strcmp($choice_student_number, "guest") == 0) {
+            continue;
+        }
+        if ($user_id == $choice_uid) {
+            echo '<option value="' . $choice_uid . '" selected>' . $choice_name . '</option>';
+        } else {
+            echo '<option value="' . $choice_uid . '">' . $choice_name . '</option>';
+        }
+    }
+    echo '</select>';
+    echo '<button class="btn btn-primary">選択</button>';
+    echo "</form>";
+    ?>
 
     <div class="schedule-wrapper">
         <table class="schedule-table-header">

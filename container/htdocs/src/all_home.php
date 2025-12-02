@@ -36,7 +36,7 @@ while ($row = $rs->fetch_assoc()) {
             continue;
     }
     echo '<tr>';
-    echo '<td style="text-align: left;">' . htmlspecialchars($name) . '</td>'; // XSS対策
+    echo '<td style="text-align: left;"><a href="?do=all_time_of_attendance&uid='.$uid.'">' . htmlspecialchars($name) . '</a></td>'; // XSS対策
     echo '<td style="text-align: left;">' . htmlspecialchars($student_number) . '</td>'; // XSS対策
 
     $sql_zaiseki = "SELECT * FROM  tb_leases WHERE MACaddress IN(

@@ -34,8 +34,9 @@
             $menu = array(
                 '在席状況' => 'all_home',
                 '在席時間帯' => 'all_time_of_attendance',
-                'スケジュール' => 'all_schedule',
-                '予定一覧' => 'all_device-list'
+                '予定一覧' => 'all_schedule',
+                '端末一覧' => 'tmp'
+                //'端末一覧' => 'all_device-list'
             );
 
             foreach ($menu as $label => $action) {
