@@ -728,11 +728,12 @@ $day_column_width_percent = 100 / $day_count;
             const end = $(this).data('end');
             const dayLabels = $(this).data('day-labels');
 
+            const placeString = String(place);
             // ★修正1: dayLabelsの後に「曜日」を追加する
             $('#modal-schedule-days').text(dayLabels).append('曜日');
 
             // ★修正2: placeが空または空白文字列の場合に「未登録」を表示する
-            const displayPlace = (place && place.trim() !== '') ? place : '未登録';
+            const displayPlace = (placeString && placeString.trim() !== '') ? placeString : '未登録';
 
             $('#modal-schedule-name').text(name);
             $('#modal-schedule-time').text(`${start} - ${end}`);
