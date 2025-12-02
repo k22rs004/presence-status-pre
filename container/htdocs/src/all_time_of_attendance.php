@@ -80,7 +80,7 @@ echo '<form method="get" class="form login-form" style="display: flex; align-ite
 echo '<input type="hidden" name="do" value="all_time_of_attendance" />';
 echo '<select class="form-select" style="width:25%; font-weight:bold;" name="uid">';
 
-$sql_user = "SELECT * FROM tb_user";
+$sql_user = "SELECT * FROM tb_user ORDER BY student_number";
 $rs_user = $conn->query($sql_user);
 $errorMessage = "";
 

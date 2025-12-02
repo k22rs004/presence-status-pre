@@ -404,7 +404,7 @@ $day_column_width_percent = 100 / $day_count;
     echo '<input type="hidden" name="do" value="all_schedule" />';
     echo '<select class="form-select" style="width:25%; font-weight:bold;" name="uid">';
 
-    $sql_user = "SELECT * FROM tb_user";
+    $sql_user = "SELECT * FROM tb_user ORDER BY student_number";
     $rs_user = $conn->query($sql_user);
     $errorMessage = "";
 
