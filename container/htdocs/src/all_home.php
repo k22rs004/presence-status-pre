@@ -27,6 +27,7 @@ echo "<td style='text-align: center;'>氏名</td>";
 echo "<td style='text-align: center;'>ID</td>";
 echo "<td style='text-align: center;'>在席状況</td>";
 echo "<td style='text-align: center;'>離席からの経過時間</td>";
+echo "<td style='text-align: center;'>現在の予定</td>";
 echo "</tr>";
 while ($row = $rs->fetch_assoc()) {
     $uid = $row['user_id'];
@@ -74,13 +75,20 @@ while ($row = $rs->fetch_assoc()) {
             $elapsed .= $minutes . "分";
 
             echo '<td style="background-color: #999999; color: white; text-align: center;">離席中</td>';
-            echo '<td style="text-align: left;">'.$elapsed.'<td>';
+            echo '<td style="text-align: left;">'.$elapsed.'</td>';
         }
     }else{
             echo '<td>未登録</td>';
-            echo "<td>-</td>";
     }
+    $current_time = $now->format('H:i:s');
+    $sql_schedule = "SELECT * FROM tb_schedule WHERE user_id = " . $uid .
+" AND (schedule_start <= '" . $current_time . "' AND schedule_end >= '" . $current_time . "')";
+    $rs_schedule = $conn->query($sql_schedule);
+    if (!$rs_schedule) die('エラー: ' . $conn->error);
+    $row_schedule = $rs_schedule->fetch_assoc();
 
+    $schedule_name = $row_schedule['schedule_name'] ?? '-';
+    echo "<td style='text-align: left;'>".$schedule_name."</td>";
     echo '</tr>';
 }
 
