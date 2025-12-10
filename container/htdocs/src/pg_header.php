@@ -54,6 +54,16 @@
             echo '</ul>';
             echo '</div>';
             echo '</nav>';
+        } else {
+            $action = isset($_GET['do']) ? $_GET['do'] : 'all_home';
+            if ($action != 'sys_login' && $action != 'sys_check' && $action != 'sys_logout') {
+                unset($_SESSION);
+                session_destroy();
+                echo "<script>";
+                echo 'window.location.href = "?do=sys_login";';
+                echo "</script>";
+                exit;
+            }
         }
         ?>
 

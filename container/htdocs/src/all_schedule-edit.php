@@ -271,7 +271,7 @@ if (!$is_authenticated && $schedule_id > 0) {
                 </label>
             </div>
             <div class="col-md-9">
-                <input type="text" class="form-control" id="schedule_name" name="schedule_name"
+                <input type="text" class="form-control" id="schedule_name" name="schedule_name" maxlength="32"
                     value="<?php echo htmlspecialchars($schedule_name); ?>" required
                     placeholder="予定名を入力">
             </div>
@@ -318,7 +318,7 @@ if (!$is_authenticated && $schedule_id > 0) {
                 </label>
             </div>
             <div class="col-md-9">
-                <input type="text" class="form-control" id="schedule_place" name="schedule_place"
+                <input type="text" class="form-control" id="schedule_place" name="schedule_place" maxlength="32"
                     value="<?php echo htmlspecialchars($schedule_place); ?>"
                     placeholder="予定の開催地を入力">
             </div>

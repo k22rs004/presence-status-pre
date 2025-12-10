@@ -395,7 +395,7 @@ $day_column_width_percent = 100 / $day_count;
         <?php
         if ($_SESSION['uid'] == $user_id) {
             //backは他の画面の戻るボタンでこの画面に戻るため0→在席時間帯画面、1→予定一覧画面
-            echo '<a href="?do=all_schedule-add&back=1" class="btn-add">予定追加ボタン</a>';
+            echo '<a href="?do=all_schedule-add&back=1" class="btn-add">予定追加</a>';
         }
         ?>
     </div>
