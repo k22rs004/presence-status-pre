@@ -80,14 +80,14 @@ while ($row = $rs->fetch_assoc()) {
             lag_calc AS (
                 SELECT
                     *,
-                    LAG(lease_end_date) OVER (
+                    LAG(lease_start_date) OVER (
                         ORDER BY lease_start_date  
-                    ) AS previous_end_date
+                    ) AS previous_start_date
                 FROM target_leases
             )
             SELECT *
             FROM lag_calc
-            WHERE TIMESTAMPDIFF(MINUTE, previous_end_date, lease_start_date) > 5
+            WHERE TIMESTAMPDIFF(SECOND, previous_start_date, lease_start_date) > 450
             ORDER BY lease_end_date DESC
             LIMIT 1;";
             $rs_zaiseki_start = $conn->query($sql_zaiseki_start);
