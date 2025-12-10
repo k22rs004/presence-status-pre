@@ -122,8 +122,14 @@ while ($row = $rs->fetch_assoc()) {
         echo '<td style="text-align: left;">-</td>';
     }
     $current_time = $now->format('H:i:s');
+    
+    $day_of_week_num = (int)$now->format('w');
+    $power = 6 - $day_of_week_num;
+    $current_day_mask = 1 << $power;
+
     $sql_schedule = "SELECT * FROM tb_schedule WHERE user_id = " . $uid .
-        " AND (schedule_start <= '" . $current_time . "' AND schedule_end >= '" . $current_time . "')";
+        " AND (schedule_start <= '" . $current_time . "' AND schedule_end >= '" . $current_time . "')
+        AND (schedule_day_of_week & " . $current_day_mask . ") != 0";
     $rs_schedule = $conn->query($sql_schedule);
     if (!$rs_schedule) die('エラー: ' . $conn->error);
     $row_schedule = $rs_schedule->fetch_assoc();
