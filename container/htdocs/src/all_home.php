@@ -30,6 +30,8 @@ echo "<td style='text-align: center;'>離席からの経過時間</td>";
 echo "<td style='text-align: center;'>離席した日時</td>";
 echo "<td style='text-align: center;'>在席開始日時</td>";
 echo "<td style='text-align: center;'>現在の予定</td>";
+echo "<td style='text-align: center;'>場所</td>";
+echo "<td style='text-align: center;'>開催時刻</td>";
 echo "</tr>";
 while ($row = $rs->fetch_assoc()) {
     $uid = $row['user_id'];
@@ -63,8 +65,8 @@ while ($row = $rs->fetch_assoc()) {
 
         if ($midpoint_time > $now) {
             echo '<td style="background-color: #66FF66; text-align: center;">在席中</td>';
-            echo '<td style="text-align: left;">-</td>';
-            echo '<td style="text-align: left;">-</td>';
+            echo '<td style="text-align: right;">-</td>';
+            echo '<td style="text-align: right;">-</td>';
 
             $sql_zaiseki_start = "
                 WITH target_leases AS (
@@ -95,9 +97,9 @@ while ($row = $rs->fetch_assoc()) {
             $row_zaiseki_start = $rs_zaiseki_start->fetch_assoc();
             $datetime_start_obj = new DateTime($row_zaiseki_start['lease_start_date'], $tz);
 
-            $zaiseki_kaishi = $datetime_start_obj->format('m月d日 H時i分') ?? $lease_start->format('m月d日 H時i分');
+            $zaiseki_kaishi = $datetime_start_obj->format('m/d H:i') ?? $lease_start->format('m/d H:i');
 
-            echo '<td style="text-align: left;">'.$zaiseki_kaishi.'</td>';
+            echo '<td style="text-align: right;">' . $zaiseki_kaishi . '</td>';
         } else {
             $diff = $now->diff($midpoint_time);
             $days = $diff->days;
@@ -107,22 +109,22 @@ while ($row = $rs->fetch_assoc()) {
             // 経過時間のフォーマット
             $elapsed = "";
             if ($days > 0) $elapsed .= $days . "日";
-            if ($hours > 0 || $days > 0) $elapsed .= $hours . "時間";
-            $elapsed .= $minutes . "分";
+            if ($hours > 0 || $days > 0) $elapsed .= time_format($hours) . "時間";
+            $elapsed .= time_format($minutes) . "分";
 
             echo '<td style="background-color: #999999; color: white; text-align: center;">離席中</td>';
-            echo '<td style="text-align: left;">' . $elapsed . '</td>';
+            echo '<td style="text-align: right;">' . $elapsed . '</td>';
 
-            echo '<td style="text-align: left;">' . $midpoint_time->format('m月d日 H時i分') . '</td>';
-            echo '<td style="text-align: left;">-</td>';
+            echo '<td style="text-align: right;">' . $midpoint_time->format('m/d H:i') . '</td>';
+            echo '<td style="text-align: right;">-</td>';
         }
     } else {
         echo '<td>未登録</td>';
-        echo '<td style="text-align: left;">-</td>';
-        echo '<td style="text-align: left;">-</td>';
+        echo '<td style="text-align: right;">-</td>';
+        echo '<td style="text-align: right;">-</td>';
     }
     $current_time = $now->format('H:i:s');
-    
+
     $day_of_week_num = (int)$now->format('w');
     $power = 6 - $day_of_week_num;
     $current_day_mask = 1 << $power;
@@ -135,8 +137,37 @@ while ($row = $rs->fetch_assoc()) {
     $row_schedule = $rs_schedule->fetch_assoc();
 
     $schedule_name = $row_schedule['schedule_name'] ?? '-';
+    $schedule_place = $row_schedule['schedule_place'] ?? '-';
+    $schedule_start = $row_schedule['schedule_start'] ?? '-';
+    $schedule_end = $row_schedule['schedule_end'] ?? '-';
+
+
     echo "<td style='text-align: left;'>" . $schedule_name . "</td>";
+    echo "<td style='text-align: left;'>" . $schedule_place . "</td>";
+    if ($schedule_start !== '-' && $schedule_end !== '-') {
+        echo "<td style='text-align: right;'>" . schedule_time_format($schedule_start) . " ~ " . schedule_time_format($schedule_end) . "</td>";
+    } else {
+        echo "<td style='text-align: right;'>-</td>";
+    }
     echo '</tr>';
 }
 
 echo "</table>";
+
+function time_format($time)
+{
+    $format_time = "";
+    if ($time < 10) {
+        $format_time = "0" . $time;
+    } else {
+        $format_time = $time;
+    }
+    return $format_time;
+}
+
+function schedule_time_format($time)
+{
+    $schedule_datetime = new DateTime($time);
+    $schedule_time = $schedule_datetime->format('H:i');
+    return $schedule_time;
+}
