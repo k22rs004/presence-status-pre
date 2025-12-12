@@ -70,8 +70,7 @@ function present_probability($uid, $week_number, $start_time, $end_time)
         $week_count--;
     }
 
-    $probability = (int)(($row_present['count_present'] * 100) / $week_count);
-
+    $probability = min((int)(($row_present['count_present'] * 100) / $week_count),100);
     return $probability;
     //return $week_count;
 }
@@ -128,7 +127,7 @@ foreach ($day_labels_jp as $day_of_week) {
     }
 }
 for ($i = 0; $i < 24; $i++) {
-    echo "<tr><td style='text-align: center;'>" . $i . ":00 ~ " . ($i + 1) . ":00</td>";
+    echo "<tr><td style='text-align: center;'>" . $i . ":00 ~ </td>";
     for ($j = 1; $j <= 7; $j++) {
         $start_time = time_format($i);
         $end_time = time_format($i + 1);
