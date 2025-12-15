@@ -75,6 +75,7 @@ VALUES (?, ?, ?, ?, ?, ?)";
                 $stmt->close();
                 // 登録成功後の遷移
                 if ($back == 0) {
+                    echo '<script>window.location.href = "index.php?do=all_time_of_attendance2&uid='.$user_id.'";</script>';
                 } else {
                     echo '<script>window.location.href = "index.php?do=all_schedule";</script>';
                 }
@@ -185,7 +186,7 @@ VALUES (?, ?, ?, ?, ?, ?)";
             <?php
             
             if ($back == 0) {
-                echo '<a href="?do=all_在席時間帯？" class="btn btn-secondary btn-custom-height">戻る</a>';
+                echo '<a href="?do=all_time_of_attendance2&uid='.$user_id.'" class="btn btn-secondary btn-custom-height">戻る</a>';
             } else {
                 echo '<a href="?do=all_schedule" class="btn btn-secondary btn-custom-height">戻る</a>';
             }

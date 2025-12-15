@@ -15,7 +15,7 @@ echo  $current_time_jst . "現在の在席状況　";
 echo '<a type="button" class="btn btn-primary" style="font-size: clamp(12px, 0.8vw, 30px);" href="?do=all_home">ページを更新</a>';
 echo "</h3>";
 
-echo "<table class='table table-hover' style='
+echo "<table class='table table-hover table-bordered' style='
     width: clamp(100px, 50vw, 800px);
     height:auto;
     white-space: nowrap;
@@ -41,7 +41,7 @@ while ($row = $rs->fetch_assoc()) {
         continue;
     }
     echo '<tr>';
-    echo '<td style="text-align: left;"><a href="?do=all_time_of_attendance&uid=' . $uid . '">' . htmlspecialchars($name) . '</a></td>'; // XSS対策
+    echo '<td style="text-align: left;"><a href="?do=all_time_of_attendance2&uid=' . $uid . '">' . htmlspecialchars($name) . '</a></td>'; // XSS対策
     echo '<td style="text-align: left;">' . htmlspecialchars($student_number) . '</td>'; // XSS対策
 
     $sql_zaiseki = "SELECT * FROM  tb_leases WHERE MACaddress IN(
@@ -109,8 +109,8 @@ while ($row = $rs->fetch_assoc()) {
             // 経過時間のフォーマット
             $elapsed = "";
             if ($days > 0) $elapsed .= $days . "日";
-            if ($hours > 0 || $days > 0) $elapsed .= time_format($hours) . "時間";
-            $elapsed .= time_format($minutes) . "分";
+            if ($hours > 0 || $days > 0) $elapsed .= time_format($days,$hours) . "時間";
+            $elapsed .= time_format($hours,$minutes) . "分";
 
             echo '<td style="background-color: #999999; color: white; text-align: center;">離席中</td>';
             echo '<td style="text-align: right;">' . $elapsed . '</td>';
@@ -131,7 +131,8 @@ while ($row = $rs->fetch_assoc()) {
 
     $sql_schedule = "SELECT * FROM tb_schedule WHERE user_id = " . $uid .
         " AND (schedule_start <= '" . $current_time . "' AND schedule_end >= '" . $current_time . "')
-        AND (schedule_day_of_week & " . $current_day_mask . ") != 0";
+        AND (schedule_day_of_week & " . $current_day_mask . ") != 0
+        ORDER BY schedule_id DESC";
     $rs_schedule = $conn->query($sql_schedule);
     if (!$rs_schedule) die('エラー: ' . $conn->error);
     $row_schedule = $rs_schedule->fetch_assoc();
@@ -154,10 +155,10 @@ while ($row = $rs->fetch_assoc()) {
 
 echo "</table>";
 
-function time_format($time)
+function time_format($time_L,$time)
 {
     $format_time = "";
-    if ($time < 10) {
+    if ($time < 10 && $time_L > 0) {
         $format_time = "0" . $time;
     } else {
         $format_time = $time;

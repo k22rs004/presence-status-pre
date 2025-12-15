@@ -79,7 +79,7 @@ if ($user_id > 0) {
 // ----------------------------------------------------------------------
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // 戻るURLを決定
-    $redirect_url = ($back == 0) ? "index.php?do=all_在席時間帯？" : "index.php?do=all_schedule";
+    $redirect_url = ($back == 0) ? "index.php?do=all_time_of_attendance2" : "index.php?do=all_schedule";
 
     if (isset($_POST['action']) && $_POST['action'] === 'delete') {
         // 削除処理
@@ -327,7 +327,7 @@ if (!$is_authenticated && $schedule_id > 0) {
         <div class="text-center mt-4 pt-3 border-top d-flex justify-content-center gap-4">
             <?php
             // 戻るボタンの遷移先を決定
-            $back_url = ($back == 0) ? "index.php?do=all_在席時間帯？" : "index.php?do=all_schedule";
+            $back_url = ($back == 0) ? "index.php?do=all_time_of_attendance2" : "index.php?do=all_schedule";
             ?>
             <a href="<?php echo $back_url; ?>" class="btn btn-secondary btn-custom-height" style="background-color: #6c757d; border-color: #6c757d;">戻る</a>
 
