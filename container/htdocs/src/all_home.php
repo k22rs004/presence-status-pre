@@ -45,7 +45,7 @@ while ($row = $rs->fetch_assoc()) {
     echo '<td style="text-align: left;">' . htmlspecialchars($student_number) . '</td>'; // XSS対策
 
     $sql_zaiseki = "SELECT * FROM  tb_leases WHERE MACaddress IN(
-     SELECT MACaddress FROM tb_device NATURAL JOIN tb_MACaddress WHERE user_id=" . $uid . ")ORDER BY lease_end_date DESC LIMIT 1";
+     SELECT MACaddress FROM tb_device NATURAL JOIN tb_MACaddress WHERE user_id=".$uid." AND MAC_delete_flag=0)ORDER BY lease_end_date DESC LIMIT 1";
 
     // 2. クエリの準備
     $rs_zaiseki = $conn->query($sql_zaiseki);
@@ -76,6 +76,7 @@ while ($row = $rs->fetch_assoc()) {
                     SELECT MACaddress
                     FROM tb_device NATURAL JOIN tb_MACaddress
                     WHERE user_id = " . $uid . "
+                    AND MAC_delete_flag=0
                     )
                 ORDER BY lease_start_date
             ),

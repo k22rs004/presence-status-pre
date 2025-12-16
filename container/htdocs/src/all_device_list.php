@@ -27,7 +27,7 @@
 <?php
 require_once('db_inc.php');
 
-$sql = "SELECT* FROM tb_device WHERE user_id =".$_SESSION['uid'];
+$sql = "SELECT* FROM tb_device WHERE user_id =".$_SESSION['uid']." AND device_delete_flag=0";
 $rs = $conn->query($sql);
 $errorMessage = "";
 if (!$rs) die('エラー: ' . $conn->error);
