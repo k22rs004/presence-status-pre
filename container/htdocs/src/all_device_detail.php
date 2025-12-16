@@ -41,7 +41,7 @@ if ($result_mac === false) {
 }
 $rs_mac = $stmt_mac->get_result();
 echo "<h2 style='margin :auto; font-size: clamp(14px, 2vw, 30px); margin-left:20%;
-margin-top:5%;'>端末名：".$row['device_name']."</h2>";
+margin-top:5%;'>端末名：".htmlspecialchars($row['device_name'])."</h2>";
 
 echo '<table class="table table-hover table-bordered" style="
     width: clamp(300px, 40vw, 800px);
