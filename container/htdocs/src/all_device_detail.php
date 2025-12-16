@@ -79,7 +79,7 @@ echo '<a href="?do=all_device_list" class="btn btn-secondary">戻る</a>';
 echo '</div>';
 // 編集・削除ボタンを後に記述
 echo '<div>'; 
-echo '<button class="btn btn-primary">編集・削除</button>';
+echo '<a href="?do=all_device_edit" class="btn btn-primary">編集・削除</a>';
 echo '</div>';
 echo "</div>";
 // 修正ここまで

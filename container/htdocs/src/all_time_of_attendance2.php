@@ -213,7 +213,7 @@ if ($period_row) {
     $period_name = $period_row['period_name'];
     $start_date = new DateTime($period_row['period_start']);
     $end_date = new DateTime($period_row['period_end']);
-    $period_display_text = $period_name."　集計期間：".$start_date->format('Y年n月j日') . ' ~ ' . $end_date->format('Y年n月j日');
+    $period_display_text = $period_name . "　集計期間：" . $start_date->format('Y年n月j日') . ' ~ ' . $end_date->format('Y年n月j日');
 }
 ?>
 
@@ -303,6 +303,7 @@ if ($period_row) {
 
         /* ヘッダーthのパディング(5px 0)を上書きし、均等なパディングに調整 */
         padding: 5px;
+        /* ★修正箇所 */
     }
 
 
@@ -472,7 +473,7 @@ if ($period_row) {
         color: white;
     }
 
-    .collection-period{
+    .collection-period {
         text-align: left;
         margin-bottom: 0px;
         margin-right: 5%;
@@ -794,5 +795,52 @@ if ($period_row) {
         $('.modal-content').on('click', function(e) {
             e.stopPropagation();
         });
+
+        /**
+         * 現在時刻を含む行が中央に来るように、テーブルのスクロール位置を調整する
+         */
+        function scrollToCurrentTime() {
+            const $tableContainer = $('.table-container');
+            const containerHeight = $tableContainer.height();
+
+            // 1. 現在の「時」を取得
+            const now = new Date();
+            const currentHour = now.getHours(); // 0-23
+
+            // 2. 現在の「時」に対応する行を取得
+            const $currentRow = $(`.schedule-table tr[data-hour="${currentHour}"]`);
+
+            if ($currentRow.length === 0) {
+                return;
+            }
+
+            // 3. スクロール位置の計算
+            const $table = $('.schedule-table');
+            const $thead = $table.find('thead');
+            const headerHeight = $thead.outerHeight();
+
+            // theadの下からの相対位置を取得 (jQueryの.offset()や.position()では計算が複雑になるため、DOMのoffsetTopを使用)
+            // trのoffsetTopは親（tbodyではない、ここではtable）からの位置なので、theadの高さを引く必要がある
+            const rowTop = $currentRow[0].offsetTop - headerHeight;
+
+            // 行の中央に配置するためのオフセット
+            // (コンテナの高さ / 2) - (行の高さ / 2)
+            const rowHeight = $currentRow.outerHeight();
+            const centerOffset = (containerHeight / 2) - (rowHeight / 2);
+
+            // 最終的なスクロール位置
+            let scrollTo = rowTop - centerOffset;
+
+            // スクロール位置を、最小値0、最大値（テーブル全体の高さ - コンテナの高さ）に制限
+            const maxScrollTop = $tableContainer[0].scrollHeight - containerHeight;
+            scrollTo = Math.max(0, Math.min(scrollTo, maxScrollTop));
+
+            // 4. スクロールを実行
+            $tableContainer.scrollTop(scrollTo);
+        }
+
+        // ページロード後にスクロールを実行
+        scrollToCurrentTime();
+
     });
 </script>
