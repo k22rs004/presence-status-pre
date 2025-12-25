@@ -1,3 +1,4 @@
+<script>setTimeout(function () {location.reload();}, 60000)</script>
 <?php
 require_once('db_inc.php');
 

@@ -1,3 +1,4 @@
+<script>setTimeout(function () {location.reload();}, 300000)</script>
 <?php
 
 // ----------------------------------------
