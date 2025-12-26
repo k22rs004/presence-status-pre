@@ -6,7 +6,6 @@ $sql = "SELECT* FROM tb_user ORDER BY student_number";
 $rs = $conn->query($sql);
 $errorMessage = "";
 if (!$rs) die('エラー: ' . $conn->error);
-//$row = $rs->fetch_assoc();
 
 echo "<h3 class='text-align: center;'>";
 $tz = new DateTimeZone('Asia/Tokyo');
@@ -91,7 +90,7 @@ while ($row = $rs->fetch_assoc()) {
             )
             SELECT *
             FROM lag_calc
-            WHERE TIMESTAMPDIFF(SECOND, previous_start_date, lease_start_date) > 450
+            WHERE TIMESTAMPDIFF(SECOND, previous_start_date, lease_start_date) > 360
             ORDER BY lease_end_date DESC
             LIMIT 1;";
             $rs_zaiseki_start = $conn->query($sql_zaiseki_start);
@@ -122,6 +121,7 @@ while ($row = $rs->fetch_assoc()) {
         }
     } else {
         echo '<td>未登録</td>';
+        echo '<td style="text-align: right;">-</td>';
         echo '<td style="text-align: right;">-</td>';
         echo '<td style="text-align: right;">-</td>';
     }
