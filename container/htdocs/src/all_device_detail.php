@@ -25,7 +25,7 @@ if($user_id != $_SESSION['uid']){
     echo '<h1>閲覧できません</h1>';
 }
 
-$sql_mac = "SELECT* FROM tb_MACaddress WHERE device_id=? AND MAC_delete_flag=0";
+$sql_mac = "SELECT* FROM tb_MACaddress WHERE device_id=? AND MAC_delete_flag=0 ORDER BY SSID";
 $stmt_mac = $conn->prepare($sql_mac);
 $errorMessage = "";
 if(!$stmt_mac) {
