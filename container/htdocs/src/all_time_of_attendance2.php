@@ -68,22 +68,37 @@ function present_probability($uid, $week_number, $start_time, $end_time)
 
     $row_period = $rs_period->fetch_assoc();
 
-    if (!$row_period) return 0;
-
-    $period_start = $row_period['period_start'];
-    $period_end = $row_period['period_end'];
+    if ($row_period) {
+        // レコードが存在する場合
+        $period_start = $row_period['period_start'];
+        $period_end = $row_period['period_end'];
+    } else {
+        // レコードが存在しない場合：3ヶ月前から今日までを設定
+        $period_end = $now_date_str;
+        
+        // $nowオブジェクトをコピーして3ヶ月戻す
+        $three_months_ago = clone $now;
+        $three_months_ago->modify('-3 months');
+        $period_start = $three_months_ago->format('Y-m-d');
+    }
 
     $sql_present = "SELECT count(DISTINCT DATE(lease_start_date)) as count_present
     FROM tb_leases
     WHERE MACaddress IN(
-    SELECT MACaddress
-    FROM tb_device
-    NATURAL JOIN tb_MACaddress
-    WHERE user_id=" . $uid . "
+        SELECT MACaddress
+        FROM tb_device
+        NATURAL JOIN tb_MACaddress
+        WHERE user_id=" . $uid . "
     )
     AND DAYOFWEEK(lease_start_date) = " . $week_number . "
-    AND (cast(lease_end_date as DATE) >= '" . $period_start . "' AND cast(lease_start_date as DATE) <= '" . $period_end . "')
-    AND (cast(lease_end_date as TIME) >= '" . $start_time . "' AND cast(lease_start_date as TIME) < '" . $end_time . "')
+    AND (
+        cast(DATE_ADD(lease_start_date, INTERVAL TIMESTAMPDIFF(SECOND, lease_start_date, lease_end_date) / 2 SECOND) as DATE) >= '" . $period_start . "' 
+        AND cast(lease_start_date as DATE) <= '" . $period_end . "'
+    )
+    AND (
+        cast(DATE_ADD(lease_start_date, INTERVAL TIMESTAMPDIFF(SECOND, lease_start_date, lease_end_date) / 2 SECOND) as TIME) >= '" . $start_time . "' 
+        AND cast(lease_start_date as TIME) < '" . $end_time . "'
+    )
     ";
     $rs_present = $conn->query($sql_present);
     $errorMessage2 = "";
@@ -209,12 +224,18 @@ $sql_period_display = "SELECT * FROM tb_calculation_period WHERE cast('" . $now_
 $rs_period_display = $conn->query($sql_period_display);
 $period_row = $rs_period_display->fetch_assoc();
 
-$period_display_text = '集計期間未設定';
 if ($period_row) {
+    // データがある場合：DBの値を反映
     $period_name = $period_row['period_name'];
     $start_date = new DateTime($period_row['period_start']);
     $end_date = new DateTime($period_row['period_end']);
     $period_display_text = $period_name . "　集計期間：" . $start_date->format('Y年n月j日') . ' ~ ' . $end_date->format('Y年n月j日');
+} else {
+    // データがない場合：3ヶ月前〜今日を計算して表示
+    $end_date = clone $now; // $nowは冒頭で作成した現在時刻のDateTimeオブジェクト
+    $start_date = (clone $now)->modify('-3 months');
+    
+    $period_display_text = "集計期間未登録：" . $start_date->format('Y年n月j日') . ' ~ ' . $end_date->format('Y年n月j日');
 }
 ?>
 
@@ -768,11 +789,7 @@ if ($period_row) {
             const start = $block.data('start');
             const end = $block.data('end');
             const dayLabels = $block.data('day-labels');
-
-            // ★修正1: dayLabelsの後に「曜日」を追加する
             $('#modal-schedule-days').text(dayLabels).append('曜日');
-
-            // ★修正2: placeが空または空白文字列の場合に「未登録」を表示する
             const displayPlace = (placeString && placeString.trim() !== '') ? placeString : '未登録';
 
             // 情報をモーダルにセット
