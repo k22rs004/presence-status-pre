@@ -145,8 +145,8 @@ while ($row = $rs->fetch_assoc()) {
     $schedule_end = $row_schedule['schedule_end'] ?? '-';
 
 
-    echo "<td style='text-align: left;'>" . $schedule_name . "</td>";
-    echo "<td style='text-align: left;'>" . $schedule_place . "</td>";
+    echo "<td style='text-align: left;'>" . htmlspecialchars($schedule_name) . "</td>";
+    echo "<td style='text-align: left;'>" . htmlspecialchars($schedule_place) . "</td>";
     if ($schedule_start !== '-' && $schedule_end !== '-') {
         echo "<td style='text-align: right;'>" . schedule_time_format($schedule_start) . " ~ " . schedule_time_format($schedule_end) . "</td>";
     } else {

@@ -132,7 +132,6 @@ function present_probability($uid, $week_number, $start_time, $end_time)
 
     $probability = min((int)(($row_present['count_present'] * 100) / $week_count), 100);
     return $probability;
-    //return $week_count;
 }
 
 // ----------------------------------------
