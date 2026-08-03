@@ -32,6 +32,7 @@ echo "<td style='text-align: center;'>在席開始日時</td>";
 echo "<td style='text-align: center;'>現在の予定</td>";
 echo "<td style='text-align: center;'>場所</td>";
 echo "<td style='text-align: center;'>開催時刻</td>";
+echo "<td style='text-align: center;'>鍵の所持</td>";
 echo "</tr>";
 while ($row = $rs->fetch_assoc()) {
     $uid = $row['user_id'];
@@ -151,6 +152,21 @@ while ($row = $rs->fetch_assoc()) {
         echo "<td style='text-align: right;'>" . schedule_time_format($schedule_start) . " ~ " . schedule_time_format($schedule_end) . "</td>";
     } else {
         echo "<td style='text-align: right;'>-</td>";
+    }
+
+    //鍵を保持しているか？
+
+    $sql_key = "SELECT * FROM tb_key WHERE user_id=".$uid." AND holder_flag=1 ORDER BY key_record DESC LIMIT 1";
+
+    // 2. クエリの準備
+    $rs_key = $conn->query($sql_key);
+    if (!$rs_key) die('エラー: ' . $conn->error);
+    $row_key = $rs_key->fetch_assoc();
+
+    if($rs_key->num_rows > 0){
+        echo "<td style='background-color: #66FF66; text-align: center; font-weight: bold;'>○</td>";
+    }else{
+        echo "<td style='text-align: center;'>-</td>";
     }
     echo '</tr>';
 }

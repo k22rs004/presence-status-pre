@@ -35,7 +35,8 @@
                 '在席状況' => 'all_home',
                 '在席時間帯' => 'all_time_of_attendance2',
                 '予定一覧' => 'all_schedule',
-                '端末一覧' => 'all_device_list'
+                '端末一覧' => 'all_device_list',
+                '鍵の譲渡' => 'all_key'
                 //'端末一覧' => 'all_device-list'
             );
 
