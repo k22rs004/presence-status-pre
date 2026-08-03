@@ -1,4 +1,7 @@
 <?php
+// タイムゾーンをJST (日本標準時: UTC+9) に設定
+date_default_timezone_set('Asia/Tokyo');
+
 // 外部のデータベース接続ファイルを読み込み ($conn が定義されている)
 require_once 'db_inc.php';
 
@@ -15,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif ($previous_user_id === $new_user_id) {
         $error = '前所有者と新所有者が同じです。別のユーザーを選択してください。';
     } else {
+        // 現在のJST日時を取得 (YYYY-MM-DD HH:MM:SS)
+        $now_jst = date('Y-m-d H:i:s');
+
         // トランザクション開始
         $conn->begin_transaction();
 
@@ -32,15 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmtUpdate->close();
 
             // 2. 新しい鍵所有者レコードを追加する（holder_flag = 1）
-            // pickup_date は現在日時（JST）を自動挿入
+            // pickup_date に JST日時（$now_jst）を直接指定
             $sqlInsert = "INSERT INTO tb_key (user_id, previous_user, pickup_date, holder_flag) 
-                          VALUES (?, ?, NOW(), 1)";
+                          VALUES (?, ?, ?, 1)";
             $stmtInsert = $conn->prepare($sqlInsert);
             if (!$stmtInsert) {
                 throw new Exception($conn->error);
             }
 
-            $stmtInsert->bind_param('ii', $new_user_id, $previous_user_id);
+            // bind_param の型指定: i (int), i (int), s (string)
+            $stmtInsert->bind_param('iis', $new_user_id, $previous_user_id, $now_jst);
             if (!$stmtInsert->execute()) {
                 throw new Exception($stmtInsert->error);
             }
